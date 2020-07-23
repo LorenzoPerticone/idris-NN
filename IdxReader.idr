@@ -101,7 +101,7 @@ getShape buf rank = sequence . map (getLen buf) $ range rank
 -- Hardly readable because idris lacks a usable MTL library
 -- (that's the cause of all these `map`, `<*>`, 
 --  `sequence` and nested `do` blocks).
--- Will probaly supply it myself soon enough...
+-- Not sure if there's an idiomatic way of doing this.
 partial
 readHead : File -> IO (Maybe ((Buffer, IdxType), (rank : Nat ** Vect rank Nat)))
 readHead file = do
@@ -151,6 +151,7 @@ readRest file buf idx (S rank) (S l :: shape) = do
     ts <- m_ts
     pure . Vector $ hs :: (unVector ts)
 
+-- Combines `readHead` and `readRest`
 partial
 readFile : File -> IO (Maybe (idx : IdxType **
                               rank : Nat **
