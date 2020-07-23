@@ -5,6 +5,7 @@ module Floating
 
 infixl 0 ^
 
+-- Will be useful in the event of an automatic differentiation library
 interface (Num a, Neg a, Abs a, Fractional a) => Floating a where
   (^)    : a -> a -> a
   f_sqrt : a -> a
@@ -24,6 +25,7 @@ interface (Num a, Neg a, Abs a, Fractional a) => Floating a where
   f_exp  : a -> a
   f_log  : a -> a
 
+-- Of course, doubles are the prototypical implementation of this interface
 implementation Floating Double where
   (^)    = pow
   f_sqrt = sqrt
