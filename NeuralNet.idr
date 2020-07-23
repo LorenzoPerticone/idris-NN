@@ -153,13 +153,13 @@ implementation Show value => Show (NeuralNet depth ranks shapes value) where
                 biases = "biases:\n" ++ show b ++ "\n"
             in header ++ weigth ++ biases ++ helper (S k) n
 
--- Only here to register instances for Num and Applicative.
+-- Only here to register instances for Num, Neg, Functor and Applicative.
 -- These aren't technically correct instances, but as long as
 -- `fromInteger`'d and `pure`'d values are manipulated correctly,
 -- everything should be fine.
 -- Never, ever try to evaluate `bad_metric` on a tensor whose
 -- shape contains a zero. Better yet, never evaluate `bad_metric`
--- at all, ever. Ever.
+-- at all.
 bad_metric : Tensor rank shape value ->
              Tensor rank shape value ->
              value
@@ -204,7 +204,7 @@ implementation Applicative (NeuralNet depth ranks shapes) where
   (LstLayer _  _ ) <*> (LstLayer _  _ ) = LstLayer bad_metric bad_metric_g
   (AddLayer n1 l1) <*> (AddLayer n2 l2) = AddLayer (n1 <*> n2) (l1 <*> l2)
 
-
+-- Execution utilities
 runNet : Num value =>
          NeuralNet depth ranks shapes value ->
          inputTypeNN shapes value ->
