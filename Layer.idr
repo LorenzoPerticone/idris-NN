@@ -32,19 +32,18 @@ implementation Show value => Show (Layer i_rank o_rank i_shape o_shape
                                          value) where
   show (MkLayer w b _ _) = show w ++ "\n\n" ++ show b
 
--- For every operation it keeps the rhs in (n1 + n2) wrt
--- activation `f`unction and it's generalized `g`radient,
--- so I strongly advocate on using `foldrT (+)  results n`
--- or `foldrT (*) results n` for whatever function relative
--- to training, where `n` is the network you're training,
--- if using a tensor as a batch: it comes pre-equipped with
--- operations being lifted pointwise to every scalar
--- contained by the network.
+-- "fake" activation and gradient, will be necessary for "unlawful" implementations
 activation_def : Tensor rank shape value -> Tensor rank shape value
 activation_def = id
 activation_g_def : Tensor rank shape value ->
                    Tensor (rank + rank) (shape ++ shape) value
 activation_g_def = flatten . pure . id
+
+-- In what follows, every binary operation on layers will
+-- keep the activation `f`unction and the `g`radient of the
+-- second argument: for this reason, I strongly advocate on
+-- using `foldrT` instead of `foldlT`.
+-- Most of the implementations that follow are "unlawful" in some way.
 
 -- fromInteger defaults to `activation_def` and `activation_g_def`
 implementation Num value => Num (Layer i_rank o_rank i_shape o_shape
