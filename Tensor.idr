@@ -262,7 +262,9 @@ tensorProduct : Num value =>
                 Tensor rank1 shape1 (Tensor rank2 shape2 value)
 tensorProduct t s = map (flip (|*>) s) t
 
--- Generalization of matrix multiplications (rows-by-columns) to tensors: index contraction.
+-- Generalization of matrix multiplications (rows-by-columns) to tensors:
+-- it can be equivalently characterized as the (iterated) index contraction
+-- of the tensor product (but should be more efficient).
 contractProduct : Num value =>
                   Tensor (rank1 + rank2) (shape1 ++ shape2) value ->
                   Tensor (rank2 + rank3) (shape2 ++ shape3) value ->
