@@ -121,26 +121,8 @@ constant = 0.0001
 RawLabelType : Type
 RawLabelType = Tensor 1 [1] Double
 
-{-
-layer1 : Layer 1 1 [13] [2] Double
-layer1 = let w = pure 0
-             b = pure 0
-         in MkLayer w b softmax_activ softmax_activ_g
+-- the Neural Network
 
-NetType : Type
-NetType = NeuralNet 0 [1, 1] [[13], [2]] 1 [2] Double
-
-NetInput : Type
-NetInput = Tensor 1 [13] Double
-
-NetOutput : Type
-NetOutput = Tensor 1 [2] Double
-
-net : NetType
-net = FstLayer layer1
--}
-
---{-
 layer1 : Layer 1 1 [13] [20] Double
 layer1 = let w = pure constant
              b = pure constant
@@ -167,11 +149,9 @@ NetOutput = Tensor 1 [2] Double
 
 net : NetType
 net = fromLayers [layer1, layer2, layer3, [crossE, crossE_g]]
---net = AddLayer (AddLayer (FstLayer layer3) layer2) layer1
---}
 
--- The network will decide if the last column should be > 20:
--- "[1, 0]" means "< 20", and "[0, 1]" means "> 20".
+-- The network will decide if the last column should be > 25:
+-- "[1, 0]" means "< 25", and "[0, 1]" means "> 25".
 --convertLabel : Tensor 1 [1] Double -> Tensor 1 [2] Double
 convertLabel : RawLabelType -> NetOutput
 convertLabel (Vector ((Scalar x) :: [])) = if x < 25
@@ -248,5 +228,3 @@ main = do
   printer show mm
   putStr "Correct / Total: "
   printer show $ (map (/) m) <*> mm
-
---  putStrLn ?output
