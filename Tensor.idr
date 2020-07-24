@@ -210,7 +210,7 @@ toFunctionPart : Tensor (rank1 + rank2) (shape1 ++ shape2) value ->
 toFunctionPart {shape1} {shape2} m =
   toFunction {shape = shape1} . bend {shape1} {shape2} $ m
 
--- functon -> Tensor
+-- function -> Tensor
 fromFunction : functionType rank shape value -> Tensor rank shape value
 fromFunction {shape = []}         x = Scalar x
 fromFunction {shape = l :: shape} f = Vector . map (fromFunction {shape} . f) $ range l
@@ -224,7 +224,7 @@ fromFunctionPart : functionType (rank1 + rank2) (shape1 ++ shape2) value ->
 fromFunctionPart {shape1 = []}          f = fromFunction f
 fromFunctionPart {shape1 = l :: shape1} f = \i => fromFunctionPart {shape1} (f i)
 
--- Function type conversion, but with single (HVect) argument (type-level out-of-bounds=
+-- Function type conversion, but with single (HVect) argument (type-level out-of-bounds)
 -- Type generation for the HVect containing the arguments
 indexType : Vect rank Nat -> Vect rank Type
 indexType [] = []
